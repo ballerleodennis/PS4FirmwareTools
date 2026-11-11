@@ -1,0 +1,165 @@
+============================================================
+ ps4fwkit - ORDNER: C:\Users\Leo-g\Pictures\PUP UNPACKER\Firmwares\Update Firmware\_extracted\PS4UPDATE2.PUP
+============================================================
+ [1] Inhalt scannen und identifizieren
+ [2] PUP-Fragmente im Ordner auflisten
+ [3] Alle PUP-Fragmente entpacken
+ [4] Alle IMG-Dateien bestimmen
+ [5] SHA-256 aller Dateien
+ [6] Angriffsflaeche anzeigen
+ [7] Ordner oeffnen
+ [G] Neues Ziel
+ [Q] Ende
+============================================================
+Auswahl: 6
+0x002  eap_kbl.slb                    [kritisch]
+       Zweck  : EAP Key Blob Loader (Aeolia Rev1). Entschluesselt und entpackt den EAP-Kernel; haelt Keyblobs im SPI-Flash.
+       Angriff: Enthaelt Keyblobs -> Angriffspunkt fuer Key-Extraktion und fuer Boot-Chain-Manipulation.
+       Krypto : AES, Keys nur aus Konsole
+
+0x004  secure_loader.slb              [kritisch]
+       Zweck  : Secure Loader (SAMU IPL-Kette), per SOCUID. Erste Stufe nach BootROM.
+       Angriff: Zentrale Boot-Chain-Stufe. Ohne Bruch hier kein echtes CFW per PUP.
+       Krypto : signiert, Private Keys NICHT auf Konsole
+
+0x005  coreos.img                     [kritisch]
+       Zweck  : COREOS = Orbis OS. Enthaelt kernel.elf, libkernel.sprx, SceSysCore.elf, SceShellCore.elf, alle Kernel-Module.
+       Angriff: DAS Ziel fuer Kernel-LPE (5.05/6.72/7.55/9.00er Ketten). Syscall-/Device-Bugs, SceSysCore-Handler, Race Conditions.
+       Krypto : AES + HMAC, Keys aus Konsole
+
+0x006  system_fs_image.img            [kritisch]
+       Zweck  : System-Partition (FAT32, spaeter TEXFAT). Usermode-Libs, u.a. libSceWebKit2.sprx, libSceNKWebKit, Netzwerk-Stack.
+       Angriff: WebKit-RCE wohnt hier (libSceWebKit2). Einstiegspunkt jeder Browser-Kette. Auch netcontrol-Surface.
+       Krypto : AES, Keys aus Konsole
+
+0x00E  eap_kbl_a2.slb                 [kritisch]
+       Zweck  : EAP KBL, Aeolia A2.
+       Angriff: wie Index 2
+       Krypto : AES
+
+0x021  eap_kbl_belize.slb             [kritisch]
+       Zweck  : EAP KBL, Belize Rev1.
+       Angriff: wie Index 2
+       Krypto : AES
+
+0x023  secure_loader_2.slb            [kritisch]
+       Zweck  : Secure Loader, 2. SOCUID (CXD90026AG).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0x025  eap_kbl_baikal.slb             [kritisch]
+       Zweck  : EAP KBL, Baikal B1.
+       Angriff: wie Index 2
+       Krypto : AES
+
+0x026  secure_loader_3.slb            [kritisch]
+       Zweck  : Secure Loader, 3. SOCUID (CXD90037G).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0x027  secure_loader_4.slb            [kritisch]
+       Zweck  : Secure Loader, 4. SOCUID (CXD90043GB).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0x02B  eap_kbl_belize2.slb            [kritisch]
+       Zweck  : EAP KBL, Belize2 A0.
+       Angriff: wie Index 2
+       Krypto : AES
+
+0x02D  secure_loader_5.slb            [kritisch]
+       Zweck  : Secure Loader, 5. SOCUID (CXD90044GB).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0x031  secure_loader_6.slb            [kritisch]
+       Zweck  : Secure Loader, 6. SOCUID (CXD90051GB).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0x032  secure_loader_7.slb            [kritisch]
+       Zweck  : Secure Loader, 7. SOCUID (CXD90055GB).
+       Angriff: Boot-Chain
+       Krypto : signiert
+
+0xD00  syscon_firmware.bin            [kritisch]
+       Zweck  : Syscon-Firmware (4000xxxx). Eigener MCU, ueberwacht Power/Reset/Temps.
+       Angriff: Syscon-Glitching fuer Downgrade; Puffer-/Protokoll-Bugs.
+       Krypto : AES, Keys aus Konsole
+
+0x001  emc_ipl.slb                    [hoch]
+       Zweck  : EMC IPL (Aeolia Rev1). Initial Program Load des EMC-Coprozessors im SPI-Flash. EMC verwaltet Power/Reset/Standby.
+       Angriff: Boot-Chain: EMC laeuft vor dem x86. Bugs hier = Code vor der Signaturpruefung. Godmode-Patches via cfw-toolkit.
+       Krypto : AES, Keys nur aus Konsole; Re-Encrypt moeglich
+
+0x007  eap_kernel.img                 [hoch]
+       Zweck  : EAP-Kernel (ARM, Southbridge). Laeuft parallel zum x86, verwaltet HDD-Key, Auth, Rest-Mode.
+       Angriff: Aeolia/Aux-Hax: ARM-Seite, eigener Heap, oft schlampiger Code. HDD-Key-Dump, Rest-Mode-Angriffe.
+       Krypto : AES, Keys aus Konsole
+
+0x008  eap_vsh_fs_image.img           [hoch]
+       Zweck  : EAP-VSH-Dateisystem (FAT16). Usermode-Daemons auf dem EAP.
+       Angriff: Angriffsflaeche gegen die EAP-Usermode-Services.
+       Krypto : AES
+
+0x00D  emc_ipl_a2.slb                 [hoch]
+       Zweck  : EMC IPL, Aeolia A2 (CXD90025G).
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x020  emc_ipl_belize.slb             [hoch]
+       Zweck  : EMC IPL, Belize Rev1 (CXD90036G).
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x024  emc_ipl_baikal.slb             [hoch]
+       Zweck  : EMC IPL, Baikal B1 (CXD90046GG).
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x028  emc_ipl_baikal_b.slb           [hoch]
+       Zweck  : EMC IPL, Baikal Rev1.
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x02A  emc_ipl_belize2.slb            [hoch]
+       Zweck  : EMC IPL, Belize2 A0.
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x02C  emc_ipl_baikal2.slb            [hoch]
+       Zweck  : EMC IPL, Baikal2.
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x02E  emc_ipl_belize2_c.slb          [hoch]
+       Zweck  : EMC IPL, Belize2 3rd Rev.
+       Angriff: wie Index 1
+       Krypto : AES
+
+0x200  orbis_swu.self                 [hoch]
+       Zweck  : Orbis Software Updater (ELF). Liest und validiert das PUP auf der Konsole.
+       Angriff: Parsing-Oberflaeche des Updaters
+       Krypto : SELF signiert
+
+0x202  orbis_swu_enc.self             [hoch]
+       Zweck  : Orbis SWU, verschluesselte SELF-Variante.
+       Angriff: wie 0x200
+       Krypto : SELF signiert
+
+0xD07  syscon_patch.bin               [hoch]
+       Zweck  : Syscon-Patch (4001xxxx).
+       Angriff: Syscon-Verhalten, Downgrade-relevant
+       Krypto : AES
+
+Drücken Sie eine beliebige Taste . . .
+
+
+
+
+
+
+
+
+
+
